@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../component/Navbar";
-import API from "../component/API";
+import API from "../secret/API";
 
 export default function EvertaleCharList() {
   const [dataChar, setDataChar] = useState();
