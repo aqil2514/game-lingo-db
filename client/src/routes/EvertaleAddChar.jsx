@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../component/Navbar";
 
-export default function AdminAddChar() {
+export default function EvertaleAddChar() {
   const [data, setData] = useState({ rankChar: [], weapon: [], elements: [], leaderSkill: [] });
   const ls = useRef(null);
   const lsEnglish = useRef(null);
@@ -37,7 +37,7 @@ export default function AdminAddChar() {
       <h1 className="text-center">Add Evertale Char</h1>
 
       <div className="container">
-        <form method="post" action="http://localhost:3000/evertale/add/char">
+        <form method="post" action="http://localhost:3000/evertale/chars">
           <div className="mb-3">
             <label htmlFor="charName" className="form-label">
               Char Name

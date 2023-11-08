@@ -4,8 +4,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home";
 import Evertale from "./routes/Evertale";
 import EvertaleCharList from "./routes/EvertaleCharList";
+import EvertaleAddChar from "./routes/EvertaleAddChar";
 import EvertaleStoryList from "./routes/EvertaleStoryList";
-import AdminAddChar from "./routes/AdminAddChar";
+import EvertaleChar from "./routes/EvertaleChar";
+import Details from "./routes/Details";
 
 const router = createBrowserRouter([
   {
@@ -25,8 +27,16 @@ const router = createBrowserRouter([
     element: <EvertaleStoryList />,
   },
   {
-    path: "/Admin/Evertale/Add/Char",
-    element: <AdminAddChar />,
+    path: "/Evertale/Char/Details/:charName",
+    element: <Details />,
+  },
+  {
+    path: "/Evertale/Char",
+    element: <EvertaleChar />,
+  },
+  {
+    path: "/evertale/char/add",
+    element: <EvertaleAddChar />,
   },
 ]);
 
