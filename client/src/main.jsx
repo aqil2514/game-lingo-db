@@ -5,6 +5,7 @@ import Home from "./routes/Home";
 import Evertale from "./routes/Evertale";
 import EvertaleCharList from "./routes/EvertaleCharList";
 import EvertaleStoryList from "./routes/EvertaleStoryList";
+import AdminAddChar from "./routes/AdminAddChar";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: "/Evertale/StoryList",
     element: <EvertaleStoryList />,
+  },
+  {
+    path: "/Admin/Evertale/Add/Char",
+    element: <AdminAddChar />,
   },
 ]);
 

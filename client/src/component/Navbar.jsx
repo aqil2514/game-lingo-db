@@ -21,6 +21,11 @@ export default function Navbar() {
                   Evertale
                 </a>
               </li>
+              <li className="nav-item">
+                <a className="nav-link text-light fw-bold" href="/Admin/Evertale/Add/Char">
+                  Add Char
+                </a>
+              </li>
             </ul>
           </div>
         </div>
