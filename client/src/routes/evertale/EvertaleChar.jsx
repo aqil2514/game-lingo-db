@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../component/Navbar";
+import Navbar from "../../component/Navbar";
 
 export default function Home() {
   const [data, setData] = useState([]);

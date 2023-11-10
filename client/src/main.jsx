@@ -2,22 +2,27 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home";
+import Register from "./routes/Register.jsx";
 
 // ROUTES EVERTALE
-import Evertale from "./routes/Evertale";
-import EvertaleCharList from "./routes/EvertaleCharList";
-import EvertaleAddChar from "./routes/EvertaleAddChar";
-import EvertaleStoryList from "./routes/EvertaleStoryList";
-import EvertaleChar from "./routes/EvertaleChar";
-import EvertaleConjures from "./routes/EvertaleConjures";
-import EvertaleEditConjures from "./routes/EvertaleEditConjures.jsx";
-import EvertaleAddConjures from "./routes/EvertaleAddConjures";
-import EvertaleCharDetails from "./routes/Details";
+import Evertale from "./routes/evertale/Evertale.jsx";
+import EvertaleCharList from "./routes/evertale/EvertaleCharList.jsx";
+import EvertaleAddChar from "./routes/evertale/EvertaleAddChar.jsx";
+import EvertaleStoryList from "./routes/evertale/EvertaleStoryList.jsx";
+import EvertaleChar from "./routes/evertale/EvertaleChar.jsx";
+import EvertaleConjures from "./routes/evertale/EvertaleConjures.jsx";
+import EvertaleEditConjures from "./routes/evertale/EvertaleEditConjures.jsx";
+import EvertaleAddConjures from "./routes/evertale/EvertaleAddConjures.jsx";
+import EvertaleCharDetails from "./routes/evertale/Details.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
   {
     path: "/evertale",

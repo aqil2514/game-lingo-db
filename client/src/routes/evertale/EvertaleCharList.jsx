@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
-import Navbar from "../component/Navbar";
-import API from "../component/API";
+import Navbar from "../../component/Navbar";
+import API from "../../component/API";
 
 export default function EvertaleCharList() {
   useLayoutEffect(() => {

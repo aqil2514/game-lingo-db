@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react";
-import Navbar from "../component/Navbar";
+import Navbar from "../../component/Navbar";
 
 export default function AddConjures() {
   useLayoutEffect(() => {

@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../component/Navbar";
+import Navbar from "../../component/Navbar";
 
 export default function Details() {
   const { charName } = useParams();

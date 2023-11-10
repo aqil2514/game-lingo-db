@@ -1,5 +1,9 @@
+// MIDDLEWARE
+import bodyParser from "body-parser";
+import methodOverride from "method-override";
 import express from "express";
 import cors from "cors";
+import bcrypt from "bcrypt";
 import "./utils/db.js";
 
 // MODELS
@@ -8,10 +12,7 @@ import Weapons from "./models/evertale/weapons.js";
 import LeaderSkills from "./models/evertale/leaderskills.js";
 import General from "./models/evertale/general.js";
 import { Conjures } from "./models/evertale/conjures.js";
-
-// MIDDLEWARE
-import bodyParser from "body-parser";
-import methodOverride from "method-override";
+import { Users } from "./models/users.js";
 
 const app = express();
 
@@ -23,6 +24,73 @@ app.use(methodOverride("_method"));
 app.get("/", (req, res) => {
   res.send("Server Aktif");
 });
+
+app.post("/users", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await Users.findOne({ username });
+
+    if (!user) {
+      res.status(404).json({ status: 404, message: "User not found!" });
+      return;
+    }
+
+    const compared = await bcrypt.compare(password, user.password);
+
+    if (compared) {
+      res.status(200).json({ status: 200, message: "Welcome admin!" });
+      return;
+    } else {
+      res.status(400).json({ status: 400, message: "Wrong Password!" });
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+    // Handle other errors
+    res.redirect("http://localhost:5173");
+    return;
+  }
+});
+
+app.post("/users/register", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await Users.findOne({ username });
+
+    if (user) {
+      return res.status(404).json({ status: 404, message: "User sudah terdaftar!\nGunakan yang lain" });
+    }
+
+    const hashed = await new Promise((resolve, reject) => {
+      bcrypt.hash(password, 10, (err, result) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+          return;
+        }
+        resolve(result);
+      });
+    });
+
+    await Users.insertMany({ username, password: hashed });
+
+    res.status(200).json({ status: 200, message: "Akun berhasil dibuat! Silahkan login!" });
+  } catch (error) {
+    console.error(error);
+    // Handle error appropriately
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/users", async (req, res) => {
+  const user = await Users.find();
+
+  res.json(user);
+});
+
+// EVERTALE SECTION
 
 app.get("/evertale/chars", async (req, res) => {
   const chars = await Char.find();

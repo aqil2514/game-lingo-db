@@ -3,50 +3,44 @@ import { useLayoutEffect } from "react";
 
 export default function Home() {
   useLayoutEffect(() => {
-    document.title = "Game Lingo - Home";
+    document.title = "Game Lingo - Register";
   }, []);
 
   function submitHandler(event) {
     event.preventDefault();
-
-    const bodyData = {
+    const formData = {
       username: document.getElementById("user-name").value,
       password: document.getElementById("password").value,
     };
 
-    fetch("http://localhost:3000/users", {
+    fetch("http://localhost:3000/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(bodyData),
+      body: JSON.stringify(formData), // Mengubah data formulir menjadi JSON
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.status === 200) {
+        if (data.status === 404) {
           alert(data.message);
-          document.location = "/admin"; //Nanti tambahin halaman Admin
-        } else {
+          document.location = "/register";
+        } else if (data.status === 200) {
           alert(data.message);
           document.location = "/";
         }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        document.location = "/register";
       });
   }
 
   return (
     <>
       <Navbar />
-      <div className="container">
-        <div className="alert alert-info text-center mt-3" role="alert">
-          Welcome to Game Lingo Database! This is part of{" "}
-          <a href="http://gamelingo30.blogspot.com/" className="alert-link">
-            My site
-          </a>{" "}
-          and this is under development.
-        </div>
-
-        <h1 className="text-center">wanna contribute?</h1>
-
+      <div className="container mt-5">
+        <h1 className="text-center">Register Form</h1>
         <form onSubmit={(event) => submitHandler(event)}>
           <div className="mb-3">
             <label htmlFor="user-name" className="form-label">
@@ -64,15 +58,6 @@ export default function Home() {
             Submit
           </button>
         </form>
-        <button
-          type="submit"
-          onClick={(e) => {
-            document.location = "/register";
-          }}
-          className="btn d-inline my-1 btn-primary"
-        >
-          Register
-        </button>
       </div>
     </>
   );
