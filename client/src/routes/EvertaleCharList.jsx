@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Navbar from "../component/Navbar";
 import API from "../component/API";
 
 export default function EvertaleCharList() {
+  useLayoutEffect(() => {
+    document.title = "Game Lingo - Character List";
+  }, []);
   const [dataChar, setDataChar] = useState();
 
   useEffect(() => {

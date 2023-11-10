@@ -1,6 +1,10 @@
 import Navbar from "../component/Navbar";
+import { useLayoutEffect } from "react";
 
 export default function Home() {
+  useLayoutEffect(() => {
+    document.title = "Game Lingo - Home";
+  }, []);
   return (
     <>
       <Navbar />
@@ -9,7 +13,7 @@ export default function Home() {
           Welcome to Game Lingo Database! This is part of{" "}
           <a href="http://gamelingo30.blogspot.com/" className="alert-link">
             My site
-          </a>
+          </a>{" "}
           and this is under development.
         </div>
       </div>

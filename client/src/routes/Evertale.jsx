@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Navbar from "../component/Navbar";
 import API from "../component/API";
 import "../css/Evertale.css";
 
 export default function Evertale() {
-  const [lang, setLang] = useState("");
+  useLayoutEffect(() => {
+    document.title = "Game Lingo - Evertale";
+  }, []);
+
+  const [lang, setLang] = useState("null");
   const [srcChar, setSrcChar] = useState();
   const [srcStory, setStory] = useState();
   const data = {
@@ -58,7 +62,9 @@ export default function Evertale() {
       <div className="container mt-2 text-center">
         <div className="form-floating">
           <select className="form-select" id="floatingSelect" value={lang} onChange={(e) => setLang(e.target.value)} aria-label="Floating label select example">
-            <option selected>Select Language</option>
+            <option value="null" selected>
+              Select Language
+            </option>
             <option value="id-ID">Bahasa Indonesia</option>
             <option value="en-EN">English Language</option>
           </select>
@@ -67,7 +73,7 @@ export default function Evertale() {
 
         <div className="list-group my-3 text-start d-flex justify-content-center align-content-center flex-row">
           <div className="card w-20 mx-3 p-1">
-            <a href="/Evertale/CharList">
+            <a href="/evertale/charlist">
               <img src={srcChar} className="card-img-top" alt="Char List" />
               <div className="card-body">
                 <p className="card-text text-primary text-center fw-bolder">Char List</p>
@@ -75,7 +81,7 @@ export default function Evertale() {
             </a>
           </div>
           <div className="card w-20 mx-3 p-1">
-            <a href="/Evertale/StoryList">
+            <a href="/evertale/storylist">
               <img src={srcStory} className="card-img-top h-100 w-100 object-fit-cover" alt="Char List" />
               <div className="card-body">
                 <p className="card-text text-primary text-center fw-bolder">Story List</p>
@@ -84,21 +90,27 @@ export default function Evertale() {
           </div>
         </div>
 
-        <h1 className="fst-italic">Evertale</h1>
-        <h2 className="text-start">{lang === "id-ID" ? data.titleId : data.titleEn}</h2>
-        <article className="text-start">{lang === "id-ID" ? data.descId : data.descEn}</article>
-        <h2 className="text-start">{lang === "id-ID" ? data.sub1Id : data.sub1En}</h2>
-        <article className="text-start">{lang === "id-ID" ? data.sub1descId : data.sub1descEn}</article>
-        <h2 className="text-start">{lang === "id-ID" ? data.sub2Id : data.sub2En}</h2>
-        <article className="text-start">{lang === "id-ID" ? data.sub2descId : data.sub2descEn}</article>
-        <h2 className="text-start">{lang === "id-ID" ? data.sub3Id : data.sub3En}</h2>
-        <article className="text-start">{lang === "id-ID" ? data.sub3descId : data.sub3descEn}</article>
-        <h2 className="text-start">{lang === "id-ID" ? data.sub4Id : data.sub4En}</h2>
-        <article className="text-start">{lang === "id-ID" ? data.sub4descId : data.sub4descEn}</article>
-        <h2 className="text-start">{lang === "id-ID" ? data.sub5Id : data.sub5En}</h2>
-        <article className="text-start">{lang === "id-ID" ? data.sub5descId : data.sub5descEn}</article>
-        <h2 className="text-start">{lang === "id-ID" ? data.sub6Id : data.sub6En}</h2>
-        <article className="text-start">{lang === "id-ID" ? data.sub6descId : data.sub6descEn}</article>
+        {lang == "null" ? (
+          <h1>Select Language First</h1>
+        ) : (
+          <>
+            <h1 className="fst-italic">Evertale</h1>
+            <h2 className="text-start">{lang === "id-ID" ? data.titleId : data.titleEn}</h2>
+            <article className="text-start">{lang === "id-ID" ? data.descId : data.descEn}</article>
+            <h2 className="text-start">{lang === "id-ID" ? data.sub1Id : data.sub1En}</h2>
+            <article className="text-start">{lang === "id-ID" ? data.sub1descId : data.sub1descEn}</article>
+            <h2 className="text-start">{lang === "id-ID" ? data.sub2Id : data.sub2En}</h2>
+            <article className="text-start">{lang === "id-ID" ? data.sub2descId : data.sub2descEn}</article>
+            <h2 className="text-start">{lang === "id-ID" ? data.sub3Id : data.sub3En}</h2>
+            <article className="text-start">{lang === "id-ID" ? data.sub3descId : data.sub3descEn}</article>
+            <h2 className="text-start">{lang === "id-ID" ? data.sub4Id : data.sub4En}</h2>
+            <article className="text-start">{lang === "id-ID" ? data.sub4descId : data.sub4descEn}</article>
+            <h2 className="text-start">{lang === "id-ID" ? data.sub5Id : data.sub5En}</h2>
+            <article className="text-start">{lang === "id-ID" ? data.sub5descId : data.sub5descEn}</article>
+            <h2 className="text-start">{lang === "id-ID" ? data.sub6Id : data.sub6En}</h2>
+            <article className="text-start">{lang === "id-ID" ? data.sub6descId : data.sub6descEn}</article>
+          </>
+        )}
       </div>
     </>
   );

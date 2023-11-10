@@ -15,6 +15,8 @@ const charSchema = new mongoose.Schema({
     leaderSkillName: String,
     leaderSkillEN: String,
     leaderSkillID: String,
+    conjures: String,
+    conjuresLink: String,
   },
   profile: {
     part1EN: String,

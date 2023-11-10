@@ -17,12 +17,12 @@ export default function Navbar() {
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link text-light fw-bold" href="/Evertale">
+                <a className="nav-link text-light fw-bold" href="/evertale">
                   Evertale
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link text-light fw-bold" href="/Evertale/Char">
+                <a className="nav-link text-light fw-bold" href="/evertale/char">
                   Char DB
                 </a>
               </li>

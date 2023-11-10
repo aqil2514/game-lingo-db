@@ -1,10 +1,15 @@
 import express from "express";
 import cors from "cors";
 import "./utils/db.js";
+
+// MODELS
 import Char from "./models/evertale/char.js";
 import Weapons from "./models/evertale/weapons.js";
 import LeaderSkills from "./models/evertale/leaderskills.js";
 import General from "./models/evertale/general.js";
+import { Conjures } from "./models/evertale/conjures.js";
+
+// MIDDLEWARE
 import bodyParser from "body-parser";
 import methodOverride from "method-override";
 
@@ -14,6 +19,10 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+
+app.get("/", (req, res) => {
+  res.send("Server Aktif");
+});
 
 app.get("/evertale/chars", async (req, res) => {
   const chars = await Char.find();
@@ -52,6 +61,49 @@ app.get("/evertale/weapons", async (req, res) => {
   res.json(weapons);
 });
 
+app.get("/evertale/conjures", async (req, res) => {
+  const conjures = await Conjures.find();
+
+  res.json(conjures);
+});
+
+app.post("/evertale/conjures", (req, res) => {
+  const { name, link } = req.body;
+
+  Conjures.insertMany({
+    name,
+    link,
+  });
+
+  res.redirect("http://localhost:5173/evertale/conjures");
+});
+
+app.get("/evertale/conjures/edit/:name", async (req, res) => {
+  const conjure = await Conjures.findOne({ name: req.params.name });
+
+  res.json(conjure);
+});
+
+app.delete("/evertale/conjures", (req, res) => {
+  Conjures.deleteOne({ name: req.body.name }).then((result) => {
+    res.redirect("http://localhost:5173/evertale/conjures");
+  });
+});
+
+app.put("/evertale/conjures", (req, res) => {
+  Conjures.updateOne(
+    { _id: req.body._id },
+    {
+      $set: {
+        name: req.body.name,
+        link: req.body.link,
+      },
+    }
+  ).then((result) => {
+    res.redirect("http://localhost:5173/evertale/conjures");
+  });
+});
+
 app.get("/evertale/leaderskills", async (req, res) => {
   const leaderSkills = await LeaderSkills.find();
 
@@ -71,5 +123,5 @@ app.get("/evertale/generals", async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log(`Server berjalan pada port 3000`);
+  console.log(`Server berjalan pada port http://localhost:3000`);
 });

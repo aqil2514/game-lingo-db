@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../component/Navbar";
 
 export default function Home() {
   const [data, setData] = useState([]);
+
+  useLayoutEffect(() => {
+    document.title = `Game Lingo - Characters List `;
+  }, []);
 
   async function api() {
     const data = await fetch("http://localhost:3000/evertale/chars").then((res) => res.json());
@@ -22,8 +26,11 @@ export default function Home() {
         <h1 className="text-uppercase mt-3">Evertale Character`s Databases</h1>
       </div>
       <div className="container">
-        <a href="/evertale/char/add" className="btn btn-success my-2">
+        <a href="/evertale/char/add" className="btn btn-success mx-1 my-2">
           Add Characters Data
+        </a>
+        <a href="/evertale/conjures" className="btn text-light btn-info mx-1 my-2">
+          Conjures List
         </a>
         <table className="table table-stripped table-hover table-info">
           <thead>
@@ -39,7 +46,7 @@ export default function Home() {
                 <th>{i++}</th>
                 <td>{d.charName}</td>
                 <td>
-                  <Link to={"/Evertale/Char/Details/" + d.charName} reloadDocument className="badge btn btn-success">
+                  <Link to={"/evertale/char/details/" + d.charName} reloadDocument className="badge btn btn-success">
                     Action
                   </Link>
                 </td>

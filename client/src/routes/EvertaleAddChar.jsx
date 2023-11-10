@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Navbar from "../component/Navbar";
 
 export default function EvertaleAddChar() {
@@ -24,6 +24,10 @@ export default function EvertaleAddChar() {
     api();
   }, []);
 
+  useLayoutEffect(() => {
+    document.title = `Game Lingo - Add Character `;
+  }, []);
+
   function lsHandler() {
     const parent = data.leaderSkill.find((dls) => ls.current.value === dls.name);
 
@@ -42,13 +46,13 @@ export default function EvertaleAddChar() {
             <label htmlFor="charName" className="form-label">
               Char Name
             </label>
-            <input type="text" className="form-control" id="charName" name="charName" />
+            <input type="text" className="form-control" id="charName" name="charName" required />
           </div>
           <div className="mb">
             <h2 className="text-center">Status</h2>
 
             <select className="form-select my-3" name="element">
-              <option defaultValue>Select Element</option>
+              <option value={"-"}>Select Element</option>
               {data?.elements.map((e, i) => (
                 <option value={e} key={`el-${i++}`} id={`el-${i++}`}>
                   {e}
@@ -57,7 +61,7 @@ export default function EvertaleAddChar() {
             </select>
 
             <select className="form-select my-3" name="rankChar">
-              <option defaultValue>Select Rank Char</option>
+              <option value={"-"}>Select Rank Char</option>
               {data?.rankChar.map((rc, i) => (
                 <option value={rc} key={`rc${i++}`} id={`rc${i++}`}>
                   {rc}
@@ -66,7 +70,7 @@ export default function EvertaleAddChar() {
             </select>
 
             <select className="form-select my-3" name="weapon1">
-              <option defaultValue>Select Weapon</option>
+              <option value={"-"}>Select Weapon</option>
               {data?.weapon.map((weapon) => (
                 <option value={weapon.name} key={weapon._id} id={weapon._id}>
                   {weapon.name}
@@ -75,7 +79,7 @@ export default function EvertaleAddChar() {
             </select>
 
             <select className="form-select my-3" name="weapon2">
-              <option defaultValue>Select Weapon</option>
+              <option value={"-"}>Select Weapon</option>
               {data?.weapon.map((weapon) => (
                 <option value={weapon.name} key={weapon._id} id={weapon._id}>
                   {weapon.name}
@@ -84,7 +88,7 @@ export default function EvertaleAddChar() {
             </select>
 
             <select ref={ls} className="form-select my-3" name="leaderSkillName" onChange={lsHandler}>
-              <option defaultValue>Select Leader Skill</option>
+              <option value={"-"}>Select Leader Skill</option>
               {data?.leaderSkill.map((ls) => (
                 <option value={ls.name} key={ls._id} id={ls._id}>
                   {ls.name}
