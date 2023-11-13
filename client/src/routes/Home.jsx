@@ -6,31 +6,41 @@ export default function Home() {
     document.title = "Game Lingo - Home";
   }, []);
 
-  function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault();
-
     const bodyData = {
       username: document.getElementById("user-name").value,
       password: document.getElementById("password").value,
     };
 
-    fetch("http://localhost:3000/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodyData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 200) {
-          alert(data.message);
-          document.location = "/admin"; //Nanti tambahin halaman Admin
-        } else {
-          alert(data.message);
-          document.location = "/";
-        }
+    try {
+      const response = await fetch("http://localhost:3000/users", {
+        method: "POST",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
       });
+
+      const data = await response.json();
+
+      console.log(data);
+
+      if (data.status === 200) {
+        alert(data.message);
+        document.location = "/admin";
+      } else if (data.status === 404) {
+        alert(data.message);
+        document.location = "/";
+      } else if (data.status === 400) {
+        alert(data.message);
+        document.location = "/";
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 
   return (
@@ -45,7 +55,7 @@ export default function Home() {
           and this is under development.
         </div>
 
-        <h1 className="text-center">wanna contribute?</h1>
+        <h1 className="text-center">Wanna contribute?</h1>
 
         <form onSubmit={(event) => submitHandler(event)}>
           <div className="mb-3">
@@ -66,7 +76,7 @@ export default function Home() {
         </form>
         <button
           type="submit"
-          onClick={(e) => {
+          onClick={() => {
             document.location = "/register";
           }}
           className="btn d-inline my-1 btn-primary"

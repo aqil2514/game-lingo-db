@@ -4,15 +4,24 @@ import Navbar from "../../component/Navbar";
 
 export default function Home() {
   const [data, setData] = useState([]);
+  const [token, setToken] = useState(false);
 
   useLayoutEffect(() => {
     document.title = `Game Lingo - Characters List `;
   }, []);
 
   async function api() {
-    const data = await fetch("http://localhost:3000/evertale/chars").then((res) => res.json());
+    const response = await fetch("http://localhost:3000/evertale/chars", {
+      credentials: "include",
+    });
 
-    setData(data);
+    const data = await response.json();
+
+    if (data.token) {
+      setToken(!token);
+    }
+
+    setData(data.chars);
   }
 
   useEffect(() => {
@@ -26,9 +35,11 @@ export default function Home() {
         <h1 className="text-uppercase mt-3">Evertale Character`s Databases</h1>
       </div>
       <div className="container">
-        <a href="/evertale/char/add" className="btn btn-success mx-1 my-2">
-          Add Characters Data
-        </a>
+        {token && (
+          <a href="/evertale/char/add" className="btn btn-success mx-1 my-2">
+            Add Characters Data
+          </a>
+        )}
         <a href="/evertale/conjures" className="btn text-light btn-info mx-1 my-2">
           Conjures List
         </a>

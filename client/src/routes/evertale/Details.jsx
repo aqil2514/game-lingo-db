@@ -5,20 +5,58 @@ import Navbar from "../../component/Navbar";
 export default function Details() {
   const { charName } = useParams();
   const [detail, setDetail] = useState();
+  const [token, setToken] = useState(false);
 
   useLayoutEffect(() => {
     document.title = `Game Lingo - ${charName} `;
   }, []);
 
   async function api() {
-    const char = await fetch("http://localhost:3000/evertale/char/details/" + charName).then((res) => res.json());
+    const response = await fetch("http://localhost:3000/evertale/char/details/" + charName, {
+      credentials: "include",
+    });
 
-    setDetail(char);
+    const data = await response.json();
+
+    if (data.token) {
+      setToken(!token);
+    }
+
+    setDetail(data.chars);
+  }
+
+  async function deleteHandler(e) {
+    try {
+      e.preventDefault();
+
+      const charName = detail.charName;
+      const allow = confirm(`Yakin ingin hapus karakter ${charName}?`);
+
+      if (!allow) {
+        alert(`Karakter ${charName} tidak jadi dihapus.`);
+        return;
+      }
+
+      const response = await fetch("http://localhost:3000/evertale/chars", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ charName }),
+      });
+
+      const data = await response.json();
+
+      alert(data.success);
+      document.location = "/evertale/char";
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
     api();
-  }, [detail]);
+  }, []);
   return (
     <>
       <Navbar />
@@ -65,11 +103,13 @@ export default function Details() {
                 <a href="/evertale/char" className="btn mx-3 badge btn-primary">
                   Back
                 </a>
-                <form action="http://localhost:3000/evertale/chars?_method=DELETE" method="post" className="d-inline">
-                  <input type="hidden" name="charName" value={detail?.charName} />
-                  <button type="submit" onClick={() => confirm("Are you sure?")} className="btn mx-3 badge btn-danger">
-                    Hapus
-                  </button>
+                <form onSubmit={(e) => deleteHandler(e)} className="d-inline">
+                  <input id="charDelete" type="hidden" name="charName" value={detail?.charName} />
+                  {token && (
+                    <button type="submit" className="btn mx-3 badge btn-danger">
+                      Hapus
+                    </button>
+                  )}
                 </form>
               </div>
             </div>
@@ -79,3 +119,5 @@ export default function Details() {
     </>
   );
 }
+
+// action="http://localhost:3000/evertale/chars?_method=DELETE" method="post"

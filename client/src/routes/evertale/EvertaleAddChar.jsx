@@ -8,6 +8,16 @@ export default function EvertaleAddChar() {
   const lsIndo = useRef(null);
 
   async function api() {
+    const response = await fetch("http://localhost:3000/evertale/chars", {
+      credentials: "include",
+    });
+    const data = await response.json();
+    if (!data.token) {
+      alert("Anda bukan admin!");
+      document.location = "/evertale/char";
+      return;
+    }
+
     const weapon = await fetch("http://localhost:3000/evertale/weapons").then((res) => res.json());
     const leaderSkill = await fetch("http://localhost:3000/evertale/leaderskills").then((res) => res.json());
     const elements = await fetch("http://localhost:3000/evertale/generals")
@@ -41,7 +51,7 @@ export default function EvertaleAddChar() {
       <h1 className="text-center">Add Evertale Char</h1>
 
       <div className="container">
-        <form method="post" action="http://localhost:3000/evertale/chars">
+        <form onSubmit={(event) => submitHandler(event)} method="post" action="http://localhost:3000/evertale/chars">
           <div className="mb-3">
             <label htmlFor="charName" className="form-label">
               Char Name

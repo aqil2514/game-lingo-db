@@ -8,10 +8,19 @@ export default function Edit() {
   const params = useParams();
 
   async function fetchData() {
-    const data = await fetch("http://localhost:3000/evertale/conjures/edit/" + params.name).then((res) => res.json());
+    const response = await fetch("http://localhost:3000/evertale/conjures/edit/" + params.name, {
+      credentials: "include",
+    });
 
-    setData(data);
-    setNewData({ name: data.name, link: data.link });
+    const data = await response.json();
+
+    if (!data.token) {
+      alert("Anda bukan admin!");
+      document.location = "/evertale/conjures";
+    }
+
+    setData(data.conjure);
+    setNewData({ name: data.conjure.name, link: data.conjure.link });
   }
 
   useLayoutEffect(() => {
@@ -21,14 +30,38 @@ export default function Edit() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  async function editHandler(e) {
+    try {
+      e.preventDefault();
+      const response = await fetch("http://localhost:3000/evertale/conjures", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          _id: document.getElementById("char-id").value,
+          name: document.getElementById("name").value,
+          link: document.getElementById("link").value,
+        }),
+      });
+
+      const data = await response.json();
+
+      alert(data.success);
+      document.location = "/evertale/conjures";
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <>
       <Navbar />
       <div className="container">
         <h1 className="text-center">Edit Conjures</h1>
-        <form action="http://localhost:3000/evertale/conjures?_method=PUT" method="POST" className="my-5">
-          <input type="hidden" className="form-control" value={data._id} id="name" name="_id" />
-          <input type="text" className="form-control" value={data.name} id="name" name="oldName" disabled />
+        <form onSubmit={(e) => editHandler(e)} className="my-5">
+          <input type="hidden" className="form-control" value={data._id} id="char-id" name="_id" />
+          <input type="text" className="form-control" value={data.name} id="oldNname" name="oldName" disabled />
           <div className="mb-3">
             <label htmlFor="name" className="form-label">
               New Name

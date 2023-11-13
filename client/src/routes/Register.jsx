@@ -6,34 +6,34 @@ export default function Home() {
     document.title = "Game Lingo - Register";
   }, []);
 
-  function submitHandler(event) {
-    event.preventDefault();
-    const formData = {
-      username: document.getElementById("user-name").value,
-      password: document.getElementById("password").value,
-    };
+  async function submitHandler(event) {
+    try {
+      event.preventDefault();
+      const formData = {
+        username: document.getElementById("user-name").value,
+        password: document.getElementById("password").value,
+        confirmPassword: document.getElementById("confirm-password").value,
+      };
 
-    fetch("http://localhost:3000/users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData), // Mengubah data formulir menjadi JSON
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 404) {
-          alert(data.message);
-          document.location = "/register";
-        } else if (data.status === 200) {
-          alert(data.message);
-          document.location = "/";
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        document.location = "/register";
+      const response = await fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData), //
       });
+
+      const data = await response.json();
+      if (!data.success) {
+        alert(data.msg);
+        return;
+      }
+
+      alert(data.msg);
+      document.location = "/";
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -53,6 +53,12 @@ export default function Home() {
               Password
             </label>
             <input type="password" className="form-control" id="password" name="password" />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="confirm-password" className="form-label">
+              Confirm Password
+            </label>
+            <input type="password" className="form-control" id="confirm-password" name="password" />
           </div>
           <button type="submit" className="btn my-1 btn-success">
             Submit

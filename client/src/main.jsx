@@ -3,6 +3,7 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./routes/Home";
 import Register from "./routes/Register.jsx";
+import Admin from "./routes/Admin.jsx";
 
 // ROUTES EVERTALE
 import Evertale from "./routes/evertale/Evertale.jsx";
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
   },
   {
     path: "/evertale",
