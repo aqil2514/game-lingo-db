@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 import "dotenv/config";
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -220,6 +221,6 @@ app.get("/logout", async (req, res) => {
 // EVERTALE SECTION
 app.use("/evertale", evertale);
 
-app.listen(3000, () => {
-  console.log(`Server berjalan pada port http://localhost:3000`);
+app.listen(PORT, () => {
+  console.log(`Server aktif`);
 });

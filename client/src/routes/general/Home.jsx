@@ -35,7 +35,7 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/users", {
+      const response = await fetch("https://game-lingodb.cyclic.app/users", {
         method: "POST",
         mode: "cors",
         credentials: "include",
