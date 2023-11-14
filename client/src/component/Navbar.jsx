@@ -29,7 +29,7 @@ export default function Navbar() {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/logout", {
+      const response = await fetch("https://game-lingodb.cyclic.app/logout", {
         credentials: "include",
       });
 
