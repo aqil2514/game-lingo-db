@@ -19,22 +19,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: ["http://localhost:5173", "https://gamelingo-db.netlify.app"],
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    credentials: true,
-    preflightContinue: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["http://localhost:5173", "https://gamelingo-db.netlify.app"],
+//     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+//     credentials: true,
+//     preflightContinue: true,
+//   })
+// );
 
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.setHeader("Access-Control-Allow-Credentials", "true");
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 app.get("/", (req, res) => {
   res.send("Server Aktif");

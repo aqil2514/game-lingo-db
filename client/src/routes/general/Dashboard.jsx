@@ -65,7 +65,7 @@ export default function Dashboard() {
     try {
       const response = await fetch("https://game-lingodb.cyclic.app/token", {
         credentials: "include",
-        mode: "cors",
+        // mode: "cors",
       });
 
       const data = await response.json();
