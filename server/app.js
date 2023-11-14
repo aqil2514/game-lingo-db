@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://www.googleapis.com", "https://gamelingo-db.netlify.app"],
+    origin: ["http://localhost:5173", "https://gamelingo-db.netlify.app"],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     credentials: true,
     preflightContinue: true,
