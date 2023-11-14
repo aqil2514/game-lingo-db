@@ -81,7 +81,7 @@ app.post("/users", async (req, res) => {
     const secretKey = process.env.SECRET_KEY;
     const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
 
-    res.cookie("token", token, { maxAge: 60 * 60 * 1000, domain: "https://gamelingo-db.netlify.app/", path: "/dashboard", sameSite: "Lax" });
+    res.cookie("token", token, { maxAge: 60 * 60 * 1000, domain: "https://gamelingo-db.netlify.app/", path: "/dashboard", sameSite: "Strict" });
     return res.json({ token: req.cookies.token, status: 200, message: `Success Login!` });
   } catch (error) {
     console.error(error);
