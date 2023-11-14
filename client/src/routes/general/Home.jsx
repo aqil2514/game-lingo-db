@@ -1,5 +1,6 @@
 import Navbar from "../../component/Navbar";
 import { useEffect, useLayoutEffect } from "react";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function Home() {
   useLayoutEffect(() => {
@@ -8,7 +9,7 @@ export default function Home() {
 
   async function token() {
     try {
-      const response = await fetch("https://game-lingodb.cyclic.app/token", {
+      const response = await fetch(`${BACKEND_API}/token`, {
         credentials: "include",
       });
 
@@ -35,7 +36,7 @@ export default function Home() {
     };
 
     try {
-      const response = await fetch("https://game-lingodb.cyclic.app/users", {
+      const response = await fetch(`${BACKEND_API}/users`, {
         method: "POST",
         mode: "cors",
         credentials: "include",
@@ -93,7 +94,7 @@ export default function Home() {
             Submit
           </button>
         </form>
-        {/* <button
+        <button
           type="submit"
           onClick={() => {
             document.location = "/register";
@@ -101,13 +102,13 @@ export default function Home() {
           className="btn d-inline my-1 btn-primary"
         >
           Register
-        </button> */}
+        </button>
         <h1 className="mt-5 ">Akun Demo</h1>
         <p>
           <strong>Username : </strong>demoaccount
         </p>
         <p>
-          <strong>password : </strong>demoaccount
+          <strong>password : </strong>123456789
         </p>
       </div>
     </>

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../component/Navbar";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -12,7 +13,7 @@ export default function Home() {
 
   async function validation() {
     try {
-      const response = await fetch("https://game-lingodb.cyclic.app/validation", {
+      const response = await fetch(`${BACKEND_API}/validation`, {
         credentials: "include",
       });
 
@@ -25,7 +26,7 @@ export default function Home() {
   }
 
   async function fetchData() {
-    const response = await fetch("https://game-lingodb.cyclic.app/evertale/chars", {
+    const response = await fetch(`${BACKEND_API}/evertale/chars`, {
       credentials: "include",
     });
 

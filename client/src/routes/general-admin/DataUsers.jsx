@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../component/Navbar";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function DataUsers() {
   const [users, setUsers] = useState([]);
@@ -7,7 +8,7 @@ export default function DataUsers() {
 
   async function validation() {
     try {
-      const response = await fetch("https://game-lingodb.cyclic.app/forbidden-area", {
+      const response = await fetch(`${BACKEND_API}/forbidden-area`, {
         credentials: "include",
       });
 
@@ -40,7 +41,7 @@ export default function DataUsers() {
         return;
       }
 
-      const response = await fetch("https://game-lingodb.cyclic.app/users");
+      const response = await fetch(`${BACKEND_API}/users`);
 
       const data = await response.json();
 
@@ -62,7 +63,7 @@ export default function DataUsers() {
         return;
       }
 
-      const response = await fetch("https://game-lingodb.cyclic.app/users", {
+      const response = await fetch(`${BACKEND_API}/users`, {
         method: "DELETE",
         credentials: "include",
         headers: {

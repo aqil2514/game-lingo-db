@@ -1,26 +1,37 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../../component/Navbar";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function Details() {
   const { charName } = useParams();
   const [detail, setDetail] = useState();
-  const [token, setToken] = useState(false);
+  const [role, setRole] = useState("");
+
+  async function validation() {
+    try {
+      const response = await fetch(`${BACKEND_API}/validation`, {
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      setRole(data.user.role);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useLayoutEffect(() => {
     document.title = `Game Lingo - ${charName} `;
   }, []);
 
   async function api() {
-    const response = await fetch("https://game-lingodb.cyclic.app/evertale/char/details/" + charName, {
+    const response = await fetch(`${BACKEND_API}/evertale/char/details/${charName}`, {
       credentials: "include",
     });
 
     const data = await response.json();
-
-    if (data.token) {
-      setToken(!token);
-    }
 
     setDetail(data.chars);
   }
@@ -37,7 +48,7 @@ export default function Details() {
         return;
       }
 
-      const response = await fetch("https://game-lingodb.cyclic.app/evertale/chars", {
+      const response = await fetch(`${BACKEND_API}/evertale/chars`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -55,6 +66,7 @@ export default function Details() {
   }
 
   useEffect(() => {
+    validation();
     api();
   }, []);
   return (
@@ -105,11 +117,12 @@ export default function Details() {
                 </a>
                 <form onSubmit={(e) => deleteHandler(e)} className="d-inline">
                   <input id="charDelete" type="hidden" name="charName" value={detail?.charName} />
-                  {token && (
-                    <button type="submit" className="btn mx-3 badge btn-danger">
-                      Hapus
-                    </button>
-                  )}
+                  {role !== "General Admin" ||
+                    (role !== "Admin" && (
+                      <button type="submit" className="btn mx-3 badge btn-danger">
+                        Hapus
+                      </button>
+                    ))}
                 </form>
               </div>
             </div>

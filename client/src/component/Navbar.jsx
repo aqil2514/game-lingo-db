@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { BACKEND_API } from "../utils/variables";
 
 export default function Navbar() {
   const [isLogin, setIsLogin] = useState(false);
 
   async function token() {
     try {
-      const response = await fetch("http://localhost:3000/token", {
+      const response = await fetch(`${BACKEND_API}/token`, {
         credentials: "include",
       });
 
@@ -29,7 +30,7 @@ export default function Navbar() {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/logout", {
+      const response = await fetch(`${BACKEND_API}/logout`, {
         credentials: "include",
       });
 

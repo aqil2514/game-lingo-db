@@ -1,20 +1,31 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../component/Navbar";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function Home() {
   const [data, setData] = useState([]);
-  const [token, setToken] = useState(false);
+  const [role, setRole] = useState("");
+
+  async function validation() {
+    try {
+      const response = await fetch(`${BACKEND_API}/validation`, {
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      setRole(data.user.role);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function api() {
-    const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures", {
+    const response = await fetch(`${BACKEND_API}/evertale/conjures`, {
       credentials: "include",
     });
     const data = await response.json();
-
-    if (data.token) {
-      setToken(!token);
-    }
 
     setData(data.conjures);
   }
@@ -24,6 +35,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    validation();
     api();
   }, []);
 
@@ -38,7 +50,7 @@ export default function Home() {
         return;
       }
 
-      const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures", {
+      const response = await fetch(`${BACKEND_API}/evertale/conjures`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -64,11 +76,12 @@ export default function Home() {
         <h1 className="text-uppercase mt-3">Evertale Conjures`s Databases</h1>
       </div>
       <div className="container">
-        {token && (
-          <a href="/evertale/conjures/add" className="btn btn-success mx-1 my-2">
-            Add Conjures Data
-          </a>
-        )}
+        {role !== "General Admin" ||
+          (role !== "Admin" && (
+            <a href="/evertale/conjures/add" className="btn btn-success mx-1 my-2">
+              Add Conjures Data
+            </a>
+          ))}
         <a href="/evertale/char" className="btn text-light btn-info mx-1 my-2">
           Characters List
         </a>
@@ -78,11 +91,12 @@ export default function Home() {
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Page</th>
-              {token && (
-                <th scope="col" className="text-center" colSpan={2}>
-                  Action
-                </th>
-              )}
+              {role !== "General Admin" ||
+                (role !== "Admin" && (
+                  <th scope="col" className="text-center" colSpan={2}>
+                    Action
+                  </th>
+                ))}
             </tr>
           </thead>
           <tbody>
@@ -95,24 +109,26 @@ export default function Home() {
                     Visit Page
                   </Link>
                 </td>
-                {token && (
-                  <td>
-                    <form onSubmit={(e) => deleteHandler(e)} className="d-inline">
-                      <input type="hidden" id="deleteChar" name="name" value={d.name} />
-                      <button type="submit" className="btn mx-3 badge btn-danger">
-                        Delete
-                      </button>
-                    </form>
-                  </td>
-                )}
-                {token && (
-                  <td>
-                    <input type="hidden" name="name" value={d.name} />
-                    <a href={"/evertale/conjures/edit/" + d.name} type="submit" className="btn mx-3 badge btn-info">
-                      Edit
-                    </a>
-                  </td>
-                )}
+                {role !== "General Admin" ||
+                  (role !== "Admin" && (
+                    <td>
+                      <form onSubmit={(e) => deleteHandler(e)} className="d-inline">
+                        <input type="hidden" id="deleteChar" name="name" value={d.name} />
+                        <button type="submit" className="btn mx-3 badge btn-danger">
+                          Delete
+                        </button>
+                      </form>
+                    </td>
+                  ))}
+                {role !== "General Admin" ||
+                  (role !== "Admin" && (
+                    <td>
+                      <input type="hidden" name="name" value={d.name} />
+                      <a href={"/evertale/conjures/edit/" + d.name} type="submit" className="btn mx-3 badge btn-info">
+                        Edit
+                      </a>
+                    </td>
+                  ))}
               </tr>
             ))}
           </tbody>

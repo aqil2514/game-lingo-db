@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import Navbar from "../../component/Navbar";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function Dashboard() {
   const [data, setData] = useState({});
@@ -63,9 +64,8 @@ export default function Dashboard() {
 
   async function fetchData() {
     try {
-      const response = await fetch("https://game-lingodb.cyclic.app/token", {
+      const response = await fetch(`${BACKEND_API}/token`, {
         credentials: "include",
-        mode: "cors",
       });
 
       const data = await response.json();
