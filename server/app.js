@@ -212,12 +212,18 @@ app.get("/forbidden-area", async (req, res) => {
 //   res.json({ user, token });
 // });
 
-app.post("/logout", (req, res) => {
-  // Menghapus cookie dengan mengatur waktu kadaluwarsa ke masa lalu
-  res.cookie("token", "", { expires: new Date(0), domain: ".cyclic.app", secure: true });
+app.get("/logout", async (req, res) => {
+  const token = req.cookies.token;
 
-  // Memberikan respons bahwa logout berhasil
-  res.json({ status: 200, message: "Logout berhasil" });
+  if (token) {
+    res.clearCookie("token", {
+      domain: ".cyclic.app",
+      secure: true,
+      sameSite: "None",
+    });
+    res.json({ msg: "Logout Success" });
+    return;
+  }
 });
 
 // EVERTALE SECTION
