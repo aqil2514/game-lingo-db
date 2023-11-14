@@ -13,7 +13,6 @@ import cookieParser from "cookie-parser";
 import "dotenv/config";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,7 +21,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173" || "https://game-lingodb.cyclic.app",
+    origin: ["http://localhost:5173", "https://www.googleapis.com"],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     credentials: true,
     preflightContinue: true,
@@ -221,6 +220,6 @@ app.get("/logout", async (req, res) => {
 // EVERTALE SECTION
 app.use("/evertale", evertale);
 
-app.listen(PORT, () => {
-  console.log(`Server aktif`);
+app.listen(3000, () => {
+  console.log(`Server berjalan pada port http://localhost:3000`);
 });
