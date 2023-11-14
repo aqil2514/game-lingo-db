@@ -81,7 +81,12 @@ app.post("/users", async (req, res) => {
     const secretKey = process.env.SECRET_KEY;
     const token = await jwt.sign(payload, secretKey, { expiresIn: "1h" });
 
-    res.cookie("token", token, { maxAge: 60 * 60 * 1000, domain: ".cyclic.app", secure: true });
+    res.cookie("token", token, {
+      maxAge: 60 * 60 * 1000,
+      domain: ".cyclic.app",
+      secure: true,
+      sameSite: "None",
+    });
     return res.json({ token: req.cookies.token, status: 200, message: `Success Login!` });
   } catch (error) {
     console.error(error);
