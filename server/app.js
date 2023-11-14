@@ -81,7 +81,7 @@ app.post("/users", async (req, res) => {
     const secretKey = process.env.SECRET_KEY;
     const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
 
-    res.cookie("token", token, { maxAge: 60 * 60 * 1000, path: "/", domain: "localhost", secure: true, httpOnly: true });
+    res.cookie("token", token, { maxAge: 60 * 60 * 1000, secure: true, httpOnly: true });
     return res.json({ token: req.cookies.token, status: 200, message: `Success Login!` });
   } catch (error) {
     console.error(error);

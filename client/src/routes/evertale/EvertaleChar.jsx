@@ -12,7 +12,7 @@ export default function Home() {
 
   async function validation() {
     try {
-      const response = await fetch("http://localhost:3000/validation", {
+      const response = await fetch("https://game-lingodb.cyclic.app/validation", {
         credentials: "include",
       });
 
@@ -25,7 +25,7 @@ export default function Home() {
   }
 
   async function fetchData() {
-    const response = await fetch("http://localhost:3000/evertale/chars", {
+    const response = await fetch("https://game-lingodb.cyclic.app/evertale/chars", {
       credentials: "include",
     });
 

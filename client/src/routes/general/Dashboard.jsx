@@ -63,7 +63,7 @@ export default function Dashboard() {
 
   async function fetchData() {
     try {
-      const response = await fetch("http://localhost:3000/token", {
+      const response = await fetch("https://game-lingodb.cyclic.app/token", {
         credentials: "include",
       });
 

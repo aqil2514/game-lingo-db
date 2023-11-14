@@ -7,7 +7,7 @@ export default function Home() {
   const [token, setToken] = useState(false);
 
   async function api() {
-    const response = await fetch("http://localhost:3000/evertale/conjures", {
+    const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures", {
       credentials: "include",
     });
     const data = await response.json();
@@ -38,7 +38,7 @@ export default function Home() {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/evertale/conjures", {
+      const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

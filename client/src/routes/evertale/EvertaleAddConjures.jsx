@@ -3,7 +3,7 @@ import Navbar from "../../component/Navbar";
 
 export default function AddConjures() {
   async function API() {
-    const response = await fetch("http://localhost:3000/evertale/chars", {
+    const response = await fetch("https://game-lingodb.cyclic.app/evertale/chars", {
       credentials: "include",
     });
     const data = await response.json();
@@ -29,7 +29,7 @@ export default function AddConjures() {
         name: document.getElementById("conjuresName").value,
         link: document.getElementById("conjuresLink").value,
       };
-      const response = await fetch("http://localhost:3000/evertale/conjures", {
+      const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

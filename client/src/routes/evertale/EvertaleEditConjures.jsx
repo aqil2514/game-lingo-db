@@ -8,7 +8,7 @@ export default function Edit() {
   const params = useParams();
 
   async function fetchData() {
-    const response = await fetch("http://localhost:3000/evertale/conjures/edit/" + params.name, {
+    const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures/edit/" + params.name, {
       credentials: "include",
     });
 
@@ -34,7 +34,7 @@ export default function Edit() {
   async function editHandler(e) {
     try {
       e.preventDefault();
-      const response = await fetch("http://localhost:3000/evertale/conjures", {
+      const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

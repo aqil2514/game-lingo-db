@@ -18,7 +18,7 @@ export default function Home() {
         role: document.getElementById("role").value,
       };
 
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("https://game-lingodb.cyclic.app/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

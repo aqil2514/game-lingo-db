@@ -8,7 +8,7 @@ export default function EvertaleAddChar() {
   const lsIndo = useRef(null);
 
   async function api() {
-    const response = await fetch("http://localhost:3000/evertale/chars", {
+    const response = await fetch("https://game-lingodb.cyclic.app/evertale/chars", {
       credentials: "include",
     });
     const data = await response.json();
@@ -18,12 +18,12 @@ export default function EvertaleAddChar() {
       return;
     }
 
-    const weapon = await fetch("http://localhost:3000/evertale/weapons").then((res) => res.json());
-    const leaderSkill = await fetch("http://localhost:3000/evertale/leaderskills").then((res) => res.json());
-    const elements = await fetch("http://localhost:3000/evertale/generals")
+    const weapon = await fetch("https://game-lingodb.cyclic.app/evertale/weapons").then((res) => res.json());
+    const leaderSkill = await fetch("https://game-lingodb.cyclic.app/evertale/leaderskills").then((res) => res.json());
+    const elements = await fetch("https://game-lingodb.cyclic.app/evertale/generals")
       .then((res) => res.json())
       .then((data) => data[0].elements);
-    const rankChar = await fetch("http://localhost:3000/evertale/generals")
+    const rankChar = await fetch("https://game-lingodb.cyclic.app/evertale/generals")
       .then((res) => res.json())
       .then((data) => data[0].rankChar);
 
@@ -51,7 +51,7 @@ export default function EvertaleAddChar() {
       <h1 className="text-center">Add Evertale Char</h1>
 
       <div className="container">
-        <form onSubmit={(event) => submitHandler(event)} method="post" action="http://localhost:3000/evertale/chars">
+        <form onSubmit={(event) => submitHandler(event)} method="post" action="https://game-lingodb.cyclic.app/evertale/chars">
           <div className="mb-3">
             <label htmlFor="charName" className="form-label">
               Char Name

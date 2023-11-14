@@ -12,7 +12,7 @@ export default function Details() {
   }, []);
 
   async function api() {
-    const response = await fetch("http://localhost:3000/evertale/char/details/" + charName, {
+    const response = await fetch("https://game-lingodb.cyclic.app/evertale/char/details/" + charName, {
       credentials: "include",
     });
 
@@ -37,7 +37,7 @@ export default function Details() {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/evertale/chars", {
+      const response = await fetch("https://game-lingodb.cyclic.app/evertale/chars", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -120,4 +120,4 @@ export default function Details() {
   );
 }
 
-// action="http://localhost:3000/evertale/chars?_method=DELETE" method="post"
+// action="https://game-lingodb.cyclic.app/evertale/chars?_method=DELETE" method="post"

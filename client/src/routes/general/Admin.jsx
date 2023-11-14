@@ -14,7 +14,7 @@ export default function Admin() {
 
   async function data() {
     try {
-      const response = await fetch("http://localhost:3000/admin", {
+      const response = await fetch("https://game-lingodb.cyclic.app/admin", {
         method: "GET",
         credentials: "include",
       });

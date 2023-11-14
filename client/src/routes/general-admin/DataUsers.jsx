@@ -7,7 +7,7 @@ export default function DataUsers() {
 
   async function validation() {
     try {
-      const response = await fetch("http://localhost:3000/forbidden-area", {
+      const response = await fetch("https://game-lingodb.cyclic.app/forbidden-area", {
         credentials: "include",
       });
 
@@ -40,7 +40,7 @@ export default function DataUsers() {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/users");
+      const response = await fetch("https://game-lingodb.cyclic.app/users");
 
       const data = await response.json();
 
@@ -62,7 +62,7 @@ export default function DataUsers() {
         return;
       }
 
-      const response = await fetch("http://localhost:3000/users", {
+      const response = await fetch("https://game-lingodb.cyclic.app/users", {
         method: "DELETE",
         credentials: "include",
         headers: {

@@ -9,7 +9,7 @@ export default function () {
 
   async function validation() {
     try {
-      const response = await fetch("http://localhost:3000/forbidden-area", {
+      const response = await fetch("https://game-lingodb.cyclic.app/forbidden-area", {
         credentials: "include",
       });
 
@@ -35,7 +35,7 @@ export default function () {
   }
 
   async function fetchData() {
-    const response = await fetch("http://localhost:3000/forbidden-area/" + id, {
+    const response = await fetch("https://game-lingodb.cyclic.app/forbidden-area/" + id, {
       credentials: "include",
     });
 
