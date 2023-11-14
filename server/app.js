@@ -216,7 +216,7 @@ app.get("/logout", async (req, res) => {
   const token = req.cookies.token;
 
   if (token) {
-    res.clearCookie("token");
+    res.cookie("token", "", { expires: new Date(0), domain: ".cyclic.app", secure: true });
     res.json({ msg: "Logout Success" });
     return;
   }
