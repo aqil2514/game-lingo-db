@@ -30,7 +30,11 @@ export default function Navbar() {
       }
 
       const response = await fetch("https://game-lingodb.cyclic.app/logout", {
+        method: "POST",
         credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await response.json();
