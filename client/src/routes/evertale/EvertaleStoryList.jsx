@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
-import Navbar from "../component/Navbar";
-import API from "../secret/API";
+import { useEffect, useLayoutEffect, useState } from "react";
+import Navbar from "../../component/Navbar";
+import API from "../../component/API";
 
 export default function EvertaleStoryList() {
   const [dataChar, setDataChar] = useState();
+
+  useLayoutEffect(() => {
+    document.title = "Game Lingo - Story List";
+  }, []);
 
   useEffect(() => {
     API("Evertale Story Info").then((res) => setDataChar(res));
