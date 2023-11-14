@@ -48,7 +48,7 @@ app.get("/dashboard", async (req, res) => {
     return;
   }
 
-  const secretKey = "9814131574Aqil2514";
+  const secretKey = process.env.SECRET_KEY;
   const compared = await jwt.verify(token, secretKey);
 
   res.json({ user: compared.user, token });
@@ -78,7 +78,7 @@ app.post("/users", async (req, res) => {
       role: user.role,
     };
 
-    const secretKey = "9814131574Aqil2514";
+    const secretKey = process.env.SECRET_KEY;
     const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
 
     res.cookie("token", token, { maxAge: 60 * 60 * 1000, secure: true, httpOnly: true });
@@ -154,7 +154,7 @@ app.post("/register", async (req, res) => {
 app.get("/token", async (req, res) => {
   const token = req.cookies.token;
 
-  const secretKey = "9814131574Aqil2514";
+  const secretKey = process.env.SECRET_KEY;
   if (token) {
     const user = await jwt.verify(token, secretKey);
 
@@ -168,7 +168,7 @@ app.get("/token", async (req, res) => {
 
 app.get("/validation", async (req, res) => {
   const token = req.cookies.token;
-  const secretKey = "9814131574Aqil2514";
+  const secretKey = process.env.SECRET_KEY;
 
   if (!token) {
     res.json({ msg: "Anda belum login!" });
@@ -183,7 +183,7 @@ app.get("/validation", async (req, res) => {
 app.get("/forbidden-area", async (req, res) => {
   const token = req.cookies.token;
 
-  const secretKey = "9814131574Aqil2514";
+  const secretKey = process.env.SECRET_KEY;
 
   if (!token) {
     res.json({ msg: "Anda belum login!" });
