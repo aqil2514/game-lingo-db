@@ -1,15 +1,36 @@
-import Navbar from "../component/Navbar";
-import { useLayoutEffect } from "react";
+import Navbar from "../../component/Navbar";
+import { useEffect, useLayoutEffect } from "react";
 
 export default function Home() {
   useLayoutEffect(() => {
     document.title = "Game Lingo - Home";
   }, []);
 
+  async function token() {
+    try {
+      const response = await fetch("http://localhost:3000/token", {
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (data.user?.user) {
+        document.location = "/dashboard";
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    token();
+  }, []);
+
   async function submitHandler(event) {
     event.preventDefault();
     const bodyData = {
-      username: document.getElementById("user-name").value,
+      username: document.getElementById("user-name").value.toLowerCase(),
       password: document.getElementById("password").value,
     };
 
@@ -26,11 +47,9 @@ export default function Home() {
 
       const data = await response.json();
 
-      console.log(data);
-
       if (data.status === 200) {
         alert(data.message);
-        document.location = "/admin";
+        document.location = "/dashboard";
       } else if (data.status === 404) {
         alert(data.message);
         document.location = "/";
@@ -74,7 +93,7 @@ export default function Home() {
             Submit
           </button>
         </form>
-        <button
+        {/* <button
           type="submit"
           onClick={() => {
             document.location = "/register";
@@ -82,7 +101,14 @@ export default function Home() {
           className="btn d-inline my-1 btn-primary"
         >
           Register
-        </button>
+        </button> */}
+        <h1 className="mt-5 ">Akun Demo</h1>
+        <p>
+          <strong>Username : </strong>demoaccount
+        </p>
+        <p>
+          <strong>password : </strong>demoaccount
+        </p>
       </div>
     </>
   );

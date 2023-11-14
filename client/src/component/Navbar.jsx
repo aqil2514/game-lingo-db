@@ -1,4 +1,51 @@
+import { useEffect, useState } from "react";
+
 export default function Navbar() {
+  const [isLogin, setIsLogin] = useState(false);
+
+  async function token() {
+    try {
+      const response = await fetch("http://localhost:3000/token", {
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (data.user?.user) {
+        setIsLogin(!isLogin);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function logoutHandler(e) {
+    try {
+      e.preventDefault();
+
+      const sure = confirm("Are you sure?");
+      if (!sure) {
+        return;
+      }
+
+      const response = await fetch("http://localhost:3000/logout", {
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      alert(data.msg);
+      document.location = "/";
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    token();
+  }, []);
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-primary">
@@ -9,13 +56,21 @@ export default function Navbar() {
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon text-light"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarNav">
+          <div className="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
             <ul className="navbar-nav">
-              <li className="nav-item">
-                <a className="nav-link text-light fw-bold" href="/">
-                  Home
-                </a>
-              </li>
+              {isLogin ? (
+                <li className="nav-item">
+                  <a className="nav-link text-light fw-bold" href="/dashboard">
+                    Dashboard
+                  </a>
+                </li>
+              ) : (
+                <li className="nav-item">
+                  <a className="nav-link text-light fw-bold" href="/">
+                    Home
+                  </a>
+                </li>
+              )}
               <li className="nav-item">
                 <a className="nav-link text-light fw-bold" href="/evertale">
                   Evertale
@@ -27,6 +82,17 @@ export default function Navbar() {
                 </a>
               </li>
             </ul>
+            {isLogin && (
+              <>
+                <ul className="navbar-nav me-5">
+                  <li className="nav-item">
+                    <a className="fw-bold btn btn-warning text-light" onClick={(e) => logoutHandler(e)}>
+                      Log Out
+                    </a>
+                  </li>
+                </ul>
+              </>
+            )}
           </div>
         </div>
       </nav>

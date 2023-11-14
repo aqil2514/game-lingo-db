@@ -68,7 +68,7 @@ export default function Evertale() {
             <option value="id-ID">Bahasa Indonesia</option>
             <option value="en-EN">English Language</option>
           </select>
-          <label forHTML="floatingSelect">{lang === "id-ID" ? "Lihat halaman ini dalam" : "See this page with"}</label>
+          <label htmlFor="floatingSelect">{lang === "id-ID" ? "Lihat halaman ini dalam" : "See this page with"}</label>
         </div>
 
         <div className="list-group my-3 text-start d-flex justify-content-center align-content-center flex-row">

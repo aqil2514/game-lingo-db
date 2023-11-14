@@ -4,28 +4,50 @@ import Navbar from "../../component/Navbar";
 
 export default function Home() {
   const [data, setData] = useState([]);
-  const [token, setToken] = useState(false);
+  const [role, setRole] = useState("");
 
   useLayoutEffect(() => {
     document.title = `Game Lingo - Characters List `;
   }, []);
 
-  async function api() {
+  async function validation() {
+    try {
+      const response = await fetch("http://localhost:3000/validation", {
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      setRole(data.user.role);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function fetchData() {
     const response = await fetch("http://localhost:3000/evertale/chars", {
       credentials: "include",
     });
 
     const data = await response.json();
 
-    if (data.token) {
-      setToken(!token);
-    }
+    console.log(data);
 
     setData(data.chars);
   }
 
+  function ctaHandler(e) {
+    if (!role) {
+      e.preventDefault();
+      alert("Silahkan login atau gunakan atau demo untuk melanjutkan\nAkun demo ada di halaman Home.");
+      return;
+    }
+  }
+
   useEffect(() => {
-    api();
+    validation();
+
+    fetchData();
   }, []);
 
   return (
@@ -35,12 +57,13 @@ export default function Home() {
         <h1 className="text-uppercase mt-3">Evertale Character`s Databases</h1>
       </div>
       <div className="container">
-        {token && (
-          <a href="/evertale/char/add" className="btn btn-success mx-1 my-2">
-            Add Characters Data
-          </a>
-        )}
-        <a href="/evertale/conjures" className="btn text-light btn-info mx-1 my-2">
+        {role !== "General Admin" ||
+          (role !== "Moderator" && (
+            <a href="/evertale/char/add" className="btn btn-success mx-1 my-2">
+              Add Characters Data
+            </a>
+          ))}
+        <a href="/evertale/conjures" onClick={(e) => ctaHandler(e)} className="btn text-light btn-info mx-1 my-2">
           Conjures List
         </a>
         <table className="table table-stripped table-hover table-info">
@@ -57,7 +80,7 @@ export default function Home() {
                 <th>{i++}</th>
                 <td>{d.charName}</td>
                 <td>
-                  <Link to={"/evertale/char/details/" + d.charName} reloadDocument className="badge btn btn-success">
+                  <Link onClick={(e) => ctaHandler(e)} to={"/evertale/char/details/" + d.charName} reloadDocument className="badge btn btn-success">
                     Action
                   </Link>
                 </td>

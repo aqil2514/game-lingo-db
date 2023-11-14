@@ -6,35 +6,41 @@ import bcrypt from "bcrypt";
 import "./utils/db.js";
 import jwt from "jsonwebtoken";
 
-import Char from "./models/evertale/char.js";
-import Weapons from "./models/evertale/weapons.js";
-import LeaderSkills from "./models/evertale/leaderskills.js";
-import General from "./models/evertale/general.js";
-import { Conjures } from "./models/evertale/conjures.js";
+import evertale from "./routes/evertale.js";
+
 import { Users } from "./models/users.js";
 import cookieParser from "cookie-parser";
 import "dotenv/config";
 
 const app = express();
 
-app.use(
-  cors({
-    origin: ["http://localhost:5173", process.env.ORIGIN_1],
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-    optionsSuccessStatus: 204,
-  })
-);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(cookieParser());
 
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://www.googleapis.com"],
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    credentials: true,
+    preflightContinue: true,
+  })
+);
+
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//   res.setHeader("Access-Control-Allow-Credentials", "true");
+//   next();
+// });
+
 app.get("/", (req, res) => {
   res.send("Server Aktif");
 });
 
-app.get("/admin", async (req, res) => {
+app.get("/dashboard", async (req, res) => {
   const token = req.cookies.token;
 
   if (!token) {
@@ -66,8 +72,10 @@ app.post("/users", async (req, res) => {
     }
 
     const payload = {
+      fullName: user.fullName,
+      nickName: user.nickName,
       user: user.username,
-      password: user.password,
+      role: user.role,
     };
 
     const secretKey = process.env.SECRET_KEY;
@@ -81,6 +89,14 @@ app.post("/users", async (req, res) => {
   }
 });
 
+app.delete("/users", async (req, res) => {
+  const { _id, username } = req.body;
+
+  await Users.deleteOne({ _id });
+
+  res.json({ msg: `Akun dengan username ${username} telah dihapus` });
+});
+
 app.get("/users", async (req, res) => {
   const user = await Users.find();
 
@@ -88,7 +104,7 @@ app.get("/users", async (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
-  const { username, password, confirmPassword } = req.body;
+  const { fullName, nickName, username, password, confirmPassword, role } = req.body;
 
   const users = await Users.findOne({ username });
 
@@ -99,6 +115,11 @@ app.post("/register", async (req, res) => {
 
   if (username.length <= 6) {
     res.json({ msg: "Username minimal 6 karakter" });
+    return;
+  }
+
+  if (username.indexOf(" ") !== -1) {
+    res.json({ msg: "Username tidak boleh mengandung spasi" });
     return;
   }
 
@@ -117,116 +138,87 @@ app.post("/register", async (req, res) => {
     return;
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  if (role == "Pilih Role") {
+    res.json({ msg: "Anda belum memilih role!" });
+    return;
+  }
 
-  await Users.insertMany({ username, password: hashedPassword });
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const lowerCaseUsername = username.toLowerCase();
+
+  await Users.insertMany({ fullName, nickName, username: lowerCaseUsername, password: hashedPassword, role });
   res.json({ success: true, msg: "Berhasil dibuat. Silahkan login!" });
   return;
 });
 
+app.get("/token", async (req, res) => {
+  const token = req.cookies.token;
+
+  const secretKey = process.env.SECRET_KEY;
+  if (token) {
+    const user = await jwt.verify(token, secretKey);
+
+    res.json({ token, user });
+    return;
+  }
+
+  res.json({ msg: "Anda belum login!" });
+  return;
+});
+
+app.get("/validation", async (req, res) => {
+  const token = req.cookies.token;
+  const secretKey = process.env.SECRET_KEY;
+
+  if (!token) {
+    res.json({ msg: "Anda belum login!" });
+    return;
+  }
+
+  const user = await jwt.verify(token, secretKey);
+
+  res.json({ user });
+});
+
+app.get("/forbidden-area", async (req, res) => {
+  const token = req.cookies.token;
+
+  const secretKey = process.env.SECRET_KEY;
+
+  if (!token) {
+    res.json({ msg: "Anda belum login!" });
+    return;
+  }
+
+  const user = await jwt.verify(token, secretKey);
+
+  if (user.role !== "General Admin") {
+    res.json({ msg: "Anda bukan pemilik situs" });
+    return;
+  }
+
+  res.json({ token, user });
+});
+
+// app.get("/forbidden-area/:id", async (req, res) => {
+//   const user = await Users.findOne({ _id: req.params.id });
+//   const token = req.cookies.token;
+
+//   res.json({ user, token });
+// });
+
+app.get("/logout", async (req, res) => {
+  const token = req.cookies.token;
+
+  if (token) {
+    res.clearCookie("token");
+    res.json({ msg: "Logout Success" });
+    return;
+  }
+});
+
 // EVERTALE SECTION
-
-app.get("/evertale/chars", async (req, res) => {
-  const chars = await Char.find();
-  const token = req.cookies.token;
-
-  res.json({ chars, token });
-});
-
-app.post("/evertale/chars", (req, res) => {
-  const { charName, element, rankChar, weapon1, weapon2, leaderSkillName, leaderSkillEN, leaderSkillID } = req.body;
-
-  Char.insertMany({
-    charName,
-    status: {
-      element,
-      rankChar,
-      weapon1,
-      weapon2,
-      leaderSkillName,
-      leaderSkillEN,
-      leaderSkillID,
-    },
-  });
-
-  res.json({ token });
-});
-
-app.delete("/evertale/chars", async (req, res) => {
-  await Char.deleteOne({ charName: req.body.charName });
-
-  res.json({ success: `Character ${req.body.charName} berhasil dihapus` });
-});
-
-app.get("/evertale/weapons", async (req, res) => {
-  const weapons = await Weapons.find();
-
-  res.json(weapons);
-});
-
-app.get("/evertale/conjures", async (req, res) => {
-  const conjures = await Conjures.find();
-  const token = req.cookies.token;
-
-  res.json({ conjures, token });
-});
-
-app.post("/evertale/conjures", (req, res) => {
-  const { name, link } = req.body;
-
-  Conjures.insertMany({
-    name,
-    link,
-  });
-
-  res.json({ success: "Unit Conjures berhasil ditambah" });
-});
-
-app.get("/evertale/conjures/edit/:name", async (req, res) => {
-  const conjure = await Conjures.findOne({ name: req.params.name });
-  const token = req.cookies.token;
-
-  res.json({ conjure, token });
-});
-
-app.delete("/evertale/conjures", async (req, res) => {
-  await Conjures.deleteOne({ name: req.body.name });
-
-  res.json({ success: `Unit conjures ${req.body.name} berhasil dihapus` });
-});
-
-app.put("/evertale/conjures", async (req, res) => {
-  await Conjures.updateOne(
-    { _id: req.body._id },
-    {
-      $set: {
-        name: req.body.name,
-        link: req.body.link,
-      },
-    }
-  );
-
-  res.json({ success: "Unit Conjures berhasil diubah" });
-});
-
-app.get("/evertale/leaderskills", async (req, res) => {
-  const leaderSkills = await LeaderSkills.find();
-
-  res.json(leaderSkills);
-});
-
-app.get("/evertale/char/details/:charName", async (req, res) => {
-  const chars = await Char.findOne({ charName: req.params.charName });
-  const token = req.cookies.token;
-
-  res.json({ chars, token });
-});
-
-app.get("/evertale/generals", async (req, res) => {
-  const general = await General.find();
-
-  res.json(general);
-});
+app.use("/evertale", evertale);
 
 app.listen(3000, () => {
   console.log(`Server berjalan pada port http://localhost:3000`);

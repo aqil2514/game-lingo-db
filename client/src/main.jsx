@@ -1,9 +1,16 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Home from "./routes/Home";
-import Register from "./routes/Register.jsx";
-import Admin from "./routes/Admin.jsx";
+import { createBrowserRouter, RouterProvider, Routes, Route } from "react-router-dom";
+
+// GENERAL ROUTES
+import Home from "./routes/general/Home.jsx";
+import Register from "./routes/general/Register.jsx";
+import Admin from "./routes/general/Admin.jsx";
+import Dashboard from "./routes/general/Dashboard.jsx";
+
+// General Admin Routes
+import DataUsers from "./routes/general-admin/DataUsers.jsx";
+// import DetailUser from "./routes/general-admin/DetailUser.jsx";
 
 // ROUTES EVERTALE
 import Evertale from "./routes/evertale/Evertale.jsx";
@@ -16,54 +23,54 @@ import EvertaleEditConjures from "./routes/evertale/EvertaleEditConjures.jsx";
 import EvertaleAddConjures from "./routes/evertale/EvertaleAddConjures.jsx";
 import EvertaleCharDetails from "./routes/evertale/Details.jsx";
 
+const EvertaleRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Evertale />} />
+      <Route path="charlist" element={<EvertaleCharList />} />
+      <Route path="storylist" element={<EvertaleStoryList />} />
+      <Route path="char/details/:charName" element={<EvertaleCharDetails />} />
+      <Route path="char" element={<EvertaleChar />} />
+      <Route path="conjures" element={<EvertaleConjures />} />
+      <Route path="conjures/edit/:name" element={<EvertaleEditConjures />} />
+      <Route path="char/add" element={<EvertaleAddChar />} />
+      <Route path="conjures/add" element={<EvertaleAddConjures />} />
+    </Routes>
+  );
+};
+
+const General = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+    </Routes>
+  );
+};
+
+const GeneralAdmin = () => {
+  return (
+    <Routes>
+      <Route path="/data-users" element={<DataUsers />} />
+      {/* <Route path="/data-users/:id" element={<DetailUser />} /> */}
+    </Routes>
+  );
+};
+
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Home />,
+    path: "/*",
+    element: <General />,
   },
   {
-    path: "/register",
-    element: <Register />,
+    path: "/evertale/*",
+    element: <EvertaleRoutes />,
   },
   {
-    path: "/admin",
-    element: <Admin />,
-  },
-  {
-    path: "/evertale",
-    element: <Evertale />,
-  },
-  {
-    path: "/evertale/charlist",
-    element: <EvertaleCharList />,
-  },
-  {
-    path: "/evertale/storylist",
-    element: <EvertaleStoryList />,
-  },
-  {
-    path: "/evertale/char/details/:charName",
-    element: <EvertaleCharDetails />,
-  },
-  {
-    path: "/evertale/char",
-    element: <EvertaleChar />,
-  },
-  {
-    path: "/evertale/conjures",
-    element: <EvertaleConjures />,
-  },
-  {
-    path: "/evertale/conjures/edit/:name",
-    element: <EvertaleEditConjures />,
-  },
-  {
-    path: "/evertale/char/add",
-    element: <EvertaleAddChar />,
-  },
-  {
-    path: "/evertale/conjures/add",
-    element: <EvertaleAddConjures />,
+    path: "/forbidden/*",
+    element: <GeneralAdmin />,
   },
 ]);
 
