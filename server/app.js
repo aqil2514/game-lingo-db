@@ -21,7 +21,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://www.googleapis.com"],
+    origin: "http://localhost:5173" || "https://game-lingodb.cyclic.app",
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     credentials: true,
     preflightContinue: true,

@@ -9,15 +9,14 @@ import { Conjures } from "../models/evertale/conjures.js";
 
 app.get("/chars", async (req, res) => {
   const chars = await Char.find();
-  const token = req.cookies.token;
 
-  res.json({ chars, token });
+  res.json({ chars });
 });
 
-app.post("/chars", (req, res) => {
+app.post("/chars", async (req, res) => {
   const { charName, element, rankChar, weapon1, weapon2, leaderSkillName, leaderSkillEN, leaderSkillID } = req.body;
 
-  Char.insertMany({
+  await Char.insertMany({
     charName,
     status: {
       element,
@@ -30,7 +29,7 @@ app.post("/chars", (req, res) => {
     },
   });
 
-  res.json({ token });
+  res.json({ msg: "Karakter berhasil ditambah" });
 });
 
 app.delete("/chars", async (req, res) => {
