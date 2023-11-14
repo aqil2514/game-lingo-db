@@ -1,5 +1,6 @@
 import Navbar from "../../component/Navbar";
 import { useLayoutEffect } from "react";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function Home() {
   useLayoutEffect(() => {
@@ -18,7 +19,7 @@ export default function Home() {
         role: document.getElementById("role").value,
       };
 
-      const response = await fetch("https://game-lingodb.cyclic.app/register", {
+      const response = await fetch(`${BACKEND_API}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

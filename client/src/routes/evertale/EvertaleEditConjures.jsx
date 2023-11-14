@@ -1,14 +1,39 @@
 import Navbar from "../../component/Navbar";
 import { useState, useEffect, useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function Edit() {
   const [data, setData] = useState({});
   const [newData, setNewData] = useState({});
   const params = useParams();
 
+  async function validation() {
+    try {
+      const response = await fetch(`${BACKEND_API}/validation`, {
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (!data.user) {
+        alert("Anda belum login!");
+        document.location = "/";
+        return;
+      }
+
+      if (data.user.role !== "General Admin" && data.user.role !== "Admin") {
+        alert("Anda tidak berhak manipulasi data.");
+        document.location = "/";
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function fetchData() {
-    const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures/edit/" + params.name, {
+    const response = await fetch(`${BACKEND_API}/ ` + params.name, {
       credentials: "include",
     });
 
@@ -28,13 +53,14 @@ export default function Edit() {
   }, []);
 
   useEffect(() => {
+    validation();
     fetchData();
   }, []);
 
   async function editHandler(e) {
     try {
       e.preventDefault();
-      const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures", {
+      const response = await fetch(`${BACKEND_API}/evertale/conjures`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

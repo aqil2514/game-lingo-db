@@ -1,21 +1,33 @@
 import { useEffect, useLayoutEffect } from "react";
 import Navbar from "../../component/Navbar";
+import { BACKEND_API } from "../../utils/variables";
 
 export default function AddConjures() {
-  async function API() {
-    const response = await fetch("https://game-lingodb.cyclic.app/evertale/chars", {
-      credentials: "include",
-    });
-    const data = await response.json();
-    if (!data.token) {
-      alert("Anda bukan admin!");
-      document.location = "/evertale/conjures";
-      return;
+  async function validation() {
+    try {
+      const response = await fetch(`${BACKEND_API}/validation`, {
+        credentials: "include",
+      });
+
+      const data = await response.json();
+
+      if (!data.user) {
+        alert("Anda belum login!");
+        document.location = "/";
+        return;
+      }
+
+      if (data.user.role !== "General Admin" && data.user.role !== "Admin") {
+        alert("Anda tidak berhak manipulasi data.");
+        document.location = "/";
+        return;
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
-
   useEffect(() => {
-    API();
+    validation();
   });
 
   useLayoutEffect(() => {
@@ -29,7 +41,7 @@ export default function AddConjures() {
         name: document.getElementById("conjuresName").value,
         link: document.getElementById("conjuresLink").value,
       };
-      const response = await fetch("https://game-lingodb.cyclic.app/evertale/conjures", {
+      const response = await fetch(`${BACKEND_API}/evertale/conjures`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
